@@ -8,6 +8,11 @@
     <artifactId>floyd-warshall</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+
+    <dependencies>
+
+    </dependencies>
+
     <build>
 
         <plugins>
