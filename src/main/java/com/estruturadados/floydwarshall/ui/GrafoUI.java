@@ -15,7 +15,7 @@ public class GrafoUI extends Pane {
                 noUI.setLayoutX(event.getSceneX());
                 noUI.setLayoutY(event.getSceneY());
 
-                noUI.setLabel("NÃ³ " + (getChildren().size() + 1));
+                noUI.setLabel("Nó " + (getChildren().size() + 1));
 
                 getChildren().add(noUI);
             }
