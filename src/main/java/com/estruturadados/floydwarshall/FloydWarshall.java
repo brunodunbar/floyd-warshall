@@ -35,6 +35,7 @@ public class FloydWarshall {
         printMatris(P);
     } 
     //link do algoritmo: https://www.youtube.com/watch?v=K6rI0umX-28 
+    //link explicação: https://www.youtube.com/watch?v=DfgaBkp02HY
     public static int[][] FloydAlgo(int [][] M){
         for (int a = 0; a < N; a++){
             for (int b = 0; b < N; b++){
@@ -46,7 +47,7 @@ public class FloydWarshall {
 //JOptionPane.showMessageDialog(null, "M[b][c] = M[b][a] + M[a][c]; :" + M[b][c] + "\nP[b][c] = a : " + P[b][c]);
                     }
                     // Ou para não manter o controle
-                    //M[i][j] = min(M[i][j], M[i][k] + M[k][j]);
+                    //M[b][c] = min(M[b][c], M[b][a] + M[a][c]);
                 }
             }
         }
@@ -61,7 +62,8 @@ public class FloydWarshall {
     public static void printMatris(int[][] Matris){
         System.out.println("\n\t"); 
         for(int j = 0; j < N; j++){   // imprime os indices das colunas
-            System.out.print("\t" + j );
+            
+            System.out.print("\t" + "Nó "+j );
         }
         System.out.println();    
         for(int j = 0; j < 35; j++){  //imprime  a linha tracejada
@@ -69,7 +71,7 @@ public class FloydWarshall {
         }
         System.out.println();
         for(int i = 0; i < N; i++){   //Imprime a matriz inteira
-            System.out.print(i + " |\t");
+            System.out.print("Nó "+i + " |\t");
             for (int j = 0; j < N; j++) {
                 System.out.print(Matris[i][j]);
                 System.out.print("\t");
