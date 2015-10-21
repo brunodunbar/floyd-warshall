@@ -37,22 +37,24 @@ public class FloydWarshall {
     //link do algoritmo: https://www.youtube.com/watch?v=K6rI0umX-28 
     //link explicação: https://www.youtube.com/watch?v=DfgaBkp02HY
     public static int[][] FloydAlgo(int [][] M){
-        for (int a = 0; a < N; a++){
-            for (int b = 0; b < N; b++){
-                for (int c = 0; c < N; c++){
+        for (int k = 0; k < N; k++){
+            for (int i = 0; i < N; i++){
+                for (int j = 0; j < N; j++){
                     // Para manter o controle
-                    if(M[b][a] + M[a][c] < M[b][c]){ // se for menor entao o menor caminho é M[i][k] + M[k][j]
-                       M[b][c] = M[b][a] + M[a][c];
-                       P[b][c] = a;
-//JOptionPane.showMessageDialog(null, "M[b][c] = M[b][a] + M[a][c]; :" + M[b][c] + "\nP[b][c] = a : " + P[b][c]);
+                    if(M[i][k] + M[k][j] < M[i][j]){ // se for menor entao o menor caminho é M[i][k] + M[k][j]
+                       M[i][j] = M[i][k] + M[k][j];
+                       P[i][j] = k;
                     }
-                    // Ou para não manter o controle
-                    //M[b][c] = min(M[b][c], M[b][a] + M[a][c]);
+                    // Retorna o menor caminho caso M[i][k] + M[k][j] não for <  M[i][j]
+                    M[i][j] = min(M[i][j], M[i][k] + M[k][j]);
                 }
             }
         }
     return M;
     }
+    /*se o caminho i for maior que j, entao retorna j, caso contrario retorna i
+    isso serve para que o menor caminho seja gravado, diferente do dijkstra que grava 
+    o caminho maior*/
     public static int min(int i, int j){
         if(i > j){
             return j;
