@@ -29,7 +29,7 @@ public class Vertice extends Group {
         line = new Line();
 
         line.setStrokeWidth(2);
-        line.setStroke(Color.GRAY.deriveColor(0, 1, 1, 0.5));
+        line.setStroke(Color.BLACK.deriveColor(0, 1, 1, 0.5));
         line.setStrokeLineCap(StrokeLineCap.BUTT);
 
         de.layoutXProperty().addListener(observable -> draw());

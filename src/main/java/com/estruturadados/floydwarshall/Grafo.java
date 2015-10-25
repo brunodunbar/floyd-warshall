@@ -1,28 +1,36 @@
 package com.estruturadados.floydwarshall;
 
 import javafx.event.Event;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-public class Grafo extends Pane {
+public class Grafo extends GridPane {
 
     private double actionX, actionY;
 
     private No noSelecionado;
 
-    private No noPartidade;
-    private No noDestino;
+    @FXML
+    private Pane grafoPane;
 
     private List<No> nos = new ArrayList<>();
     private List<Vertice> vertices = new ArrayList<>();
@@ -30,6 +38,18 @@ public class Grafo extends Pane {
     private final ContextMenu contextMenu;
 
     public Grafo() {
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Grafo.fxml"));
+        fxmlLoader.setRoot(this);
+        fxmlLoader.setController(this);
+
+        try {
+            fxmlLoader.load();
+        } catch (IOException exception) {
+            throw new RuntimeException(exception);
+        }
+
+
         contextMenu = new ContextMenu();
         MenuItem novoNo = new MenuItem("Novo Nó");
         novoNo.setOnAction(e -> {
@@ -38,18 +58,17 @@ public class Grafo extends Pane {
             no.setLayoutX(actionX);
             no.setLayoutY(actionY);
 
-            no.setLabel("Nó " + (getChildren().size() + 1));
+            no.setLabel("Nó " + (grafoPane.getChildren().size() + 1));
 
             nos.add(no);
-            getChildren().add(makeDraggable(no));
+            grafoPane.getChildren().add(makeDraggable(no));
         });
         contextMenu.getItems().addAll(novoNo);
 
-
-        this.setOnMouseClicked(event -> {
+        grafoPane.setOnMouseClicked(event -> {
             if (event.getButton() == MouseButton.SECONDARY) {
-                actionX = event.getSceneX();
-                actionY = event.getSceneY();
+                actionX = event.getX();
+                actionY = event.getY();
 
                 contextMenu.show(Grafo.this, event.getScreenX(), event.getScreenY());
             } else {
@@ -71,7 +90,7 @@ public class Grafo extends Pane {
                     if (!possuiVertice(noSelecionado, no)) {
                         Vertice vertice = new Vertice(noSelecionado, no);
                         vertices.add(vertice);
-                        getChildren().add(vertice);
+                        grafoPane.getChildren().add(vertice);
                     }
                 }
             }

@@ -9,3 +9,11 @@
 .no.selecionado {
     -fx-border-color: deepskyblue;
 }
+
+.propriedades{
+    -fx-background-color: white;
+    -fx-border-color: black;
+    -fx-border-width: 1;
+    -fx-border-radius: 6;
+    -fx-padding: 6;
+}
