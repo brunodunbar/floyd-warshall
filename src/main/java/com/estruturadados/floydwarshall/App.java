@@ -1,6 +1,5 @@
 package com.estruturadados.floydwarshall;
 
-import com.estruturadados.floydwarshall.ui.GrafoUI;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -14,10 +13,13 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        GrafoUI grafoUI = new GrafoUI();
+        Grafo grafo = new Grafo();
 
-        primaryStage.setScene(new Scene(grafoUI));
-        primaryStage.setTitle("Custom Control");
+        Scene scene = new Scene(grafo);
+        scene.getStylesheets().add("/app.css");
+
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("Floyd Warshall");
         primaryStage.setWidth(500);
         primaryStage.setHeight(400);
         primaryStage.show();
