@@ -1,36 +1,53 @@
 package com.estruturadados.floydwarshall;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextInputDialog;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.StrokeLineCap;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public class Vertice extends Group {
 
     private No de;
     private No para;
 
-    private Line line = new Line();
-    private Label label = new Label();
+    @FXML
+    private Line line;
 
-    int distancia;
+    @FXML
+    private Label label;
+
+    IntegerProperty distancia = new SimpleIntegerProperty();
 
     public Vertice(No de, No para) {
 
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Vertice.fxml"));
+        fxmlLoader.setRoot(this);
+        fxmlLoader.setController(this);
+
+        try {
+            fxmlLoader.load();
+        } catch (IOException exception) {
+            throw new RuntimeException(exception);
+        }
+
+        label.textProperty().bind(distancia.asString());
+
         this.de = de;
         this.para = para;
-
-        line = new Line();
-
-        line.setStrokeWidth(2);
-        line.setStroke(Color.BLACK.deriveColor(0, 1, 1, 0.5));
-        line.setStrokeLineCap(StrokeLineCap.BUTT);
 
         de.layoutXProperty().addListener(observable -> draw());
         de.layoutYProperty().addListener(observable -> draw());
@@ -39,8 +56,21 @@ public class Vertice extends Group {
         para.layoutXProperty().addListener(observable -> draw());
 
         draw();
+    }
 
-        getChildren().addAll(line, label);
+    @FXML
+    private void handleMouseClicked(MouseEvent event) {
+
+        if(event.getClickCount() == 2) {
+
+            TextInputDialog dialog = new TextInputDialog(distancia.asString().getValue());
+            dialog.setTitle("Distancia do vertice");
+            dialog.setContentText("Digite a distancia do vertice:");
+            Optional<String> result = dialog.showAndWait();
+            result.ifPresent(valor -> {
+                distancia.set(Integer.valueOf(valor));
+            });
+        }
     }
 
     private void draw() {
@@ -61,9 +91,6 @@ public class Vertice extends Group {
         line.setEndX(paraPosition.getX());
         line.setEndY(paraPosition.getY());
 
-        distancia = Double.valueOf(deCenter.distance(paraCenter)).intValue();
-
-        label.setText(Integer.toString(distancia));
         label.setLayoutX(dePosition.getX() + ((paraPosition.getX() - dePosition.getX()) / 2));
         label.setLayoutY(dePosition.getY() + ((paraPosition.getY() - dePosition.getY()) / 2));
     }
@@ -96,6 +123,18 @@ public class Vertice extends Group {
 
     public No getPara() {
         return para;
+    }
+
+    public int getDistancia() {
+        return distancia.get();
+    }
+
+    public IntegerProperty distanciaProperty() {
+        return distancia;
+    }
+
+    public void setDistancia(int distancia) {
+        this.distancia.set(distancia);
     }
 
     @Override

@@ -10,10 +10,28 @@
     -fx-border-color: deepskyblue;
 }
 
+.no.inicial {
+    -fx-background-color: lightgreen;
+}
+
+.no.final {
+    -fx-background-color: red;
+}
+
 .propriedades{
     -fx-background-color: white;
     -fx-border-color: black;
     -fx-border-width: 1;
     -fx-border-radius: 6;
     -fx-padding: 6;
+}
+
+.vertice-linha {
+    -fx-stroke-width: 2px;
+    -fx-stroke: black;
+    -fx-stroke-line-cap: butt;
+}
+
+.vertice-label {
+    -fx-text-fill: white;
 }

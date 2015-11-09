@@ -1,27 +1,28 @@
 package com.estruturadados.floydwarshall;
 
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class App extends Application {
+import java.io.IOException;
+
+public class Bootstrap extends Application {
 
     public static void main(String[] args) {
         launch(args);
     }
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws IOException {
 
-        Grafo grafo = new Grafo();
-
-        Scene scene = new Scene(grafo);
+        Parent root = FXMLLoader.load(getClass().getResource("/App.fxml"));
+        Scene scene = new Scene(root, 500, 400);
         scene.getStylesheets().add("/app.css");
 
         primaryStage.setScene(scene);
         primaryStage.setTitle("Floyd Warshall");
-        primaryStage.setWidth(500);
-        primaryStage.setHeight(400);
         primaryStage.show();
     }
 }
