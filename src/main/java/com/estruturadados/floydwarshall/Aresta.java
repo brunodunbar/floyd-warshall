@@ -32,7 +32,7 @@ public class Aresta extends Group {
 
     public Aresta(No de, No para) {
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Vertice.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Aresta.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
 
