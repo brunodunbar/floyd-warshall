@@ -53,6 +53,10 @@ public class No extends VBox {
     public void setLabel(String value) {
         label.setText(value);
     }
+    
+    public String getLabel(){
+        return label.getText();
+    }
 
     public void setSelecionado(boolean selecionado) {
         this.selecionado.set(selecionado);

@@ -126,6 +126,9 @@ public class Aresta extends Group {
     public int getDistancia() {
         return distancia.get();
     }
+    public String getLabel() {
+        return label.getText();
+    }
 
     public IntegerProperty distanciaProperty() {
         return distancia;
