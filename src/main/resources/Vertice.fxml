@@ -3,6 +3,6 @@
 <?import javafx.scene.Group?>
 <?import javafx.scene.shape.Line?>
 <fx:root type="javafx.scene.Group" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8">
-    <Line fx:id="line" styleClass="vertice-linha"/>
-    <Label fx:id="label" styleClass="vertice-label" onMouseClicked="#handleMouseClicked"/>
+    <Line fx:id="line" styleClass="aresta-linha"/>
+    <Label fx:id="label" styleClass="aresta-label" onMouseClicked="#handleMouseClicked"/>
 </fx:root>

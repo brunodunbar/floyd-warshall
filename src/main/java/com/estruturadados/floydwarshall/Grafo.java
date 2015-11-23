@@ -11,20 +11,13 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import sun.swing.MenuItemLayoutHelper;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Grafo extends GridPane {
@@ -42,7 +35,7 @@ public class Grafo extends GridPane {
     private Pane grafoPane;
 
     private ObservableList<No> nos = FXCollections.observableArrayList();
-    private ObservableList<Vertice> vertices = FXCollections.observableArrayList();
+    private ObservableList<Aresta> arestas = FXCollections.observableArrayList();
 
     private final ContextMenu contextMenu;
 
@@ -76,7 +69,7 @@ public class Grafo extends GridPane {
             }
         });
 
-        vertices.addListener((ListChangeListener<Vertice>) c -> {
+        arestas.addListener((ListChangeListener<Aresta>) c -> {
             while (c.next()) {
                 if (c.wasRemoved()) {
                     grafoPane.getChildren().removeAll(c.getRemoved());
@@ -105,8 +98,8 @@ public class Grafo extends GridPane {
 
         noContextMenu = new ContextMenu();
 
-        MenuItem criarVertice = new MenuItem("Criar vertice");
-        criarVertice.setOnAction(event -> {
+        MenuItem criarAresta = new MenuItem("Criar aresta");
+        criarAresta.setOnAction(event -> {
 
             if (actionNo == null) {
                 return;
@@ -114,8 +107,8 @@ public class Grafo extends GridPane {
 
             if (noSelecionado != null && noSelecionado != actionNo) {
                 if (!possuiVertice(noSelecionado, actionNo)) {
-                    Vertice vertice = new Vertice(noSelecionado, actionNo);
-                    vertices.add(vertice);
+                    Aresta aresta = new Aresta(noSelecionado, actionNo);
+                    arestas.add(aresta);
                 }
             }
         });
@@ -141,7 +134,7 @@ public class Grafo extends GridPane {
 
         });
 
-        noContextMenu.getItems().addAll(criarVertice, definirInicial, definirFinal);
+        noContextMenu.getItems().addAll(criarAresta, definirInicial, definirFinal);
 
         grafoPane.setOnMouseClicked(event -> {
             if (event.getButton() == MouseButton.SECONDARY) {
@@ -222,8 +215,13 @@ public class Grafo extends GridPane {
     }
 
     private boolean possuiVertice(No no1, No no2) {
-        return vertices.stream().anyMatch(vertice -> vertice.getDe().equals(no1) && vertice.getPara().equals(no2) ||
-                vertice.getDe().equals(no2) && vertice.getPara().equals(no1));
+        return buscaVertice(no1, no2).isPresent();
+    }
+
+    private Optional<Aresta> buscaVertice(No no1, No no2) {
+        return arestas.stream().filter(vertice -> vertice.getDe().equals(no1) && vertice.getPara().equals(no2) ||
+                vertice.getDe().equals(no2) && vertice.getPara().equals(no1))
+                .findAny();
     }
 
     private class Delta {
@@ -234,8 +232,8 @@ public class Grafo extends GridPane {
         return nos;
     }
 
-    public ObservableList<Vertice> getVertices() {
-        return vertices;
+    public ObservableList<Aresta> getArestas() {
+        return arestas;
     }
 
     public void clear() {

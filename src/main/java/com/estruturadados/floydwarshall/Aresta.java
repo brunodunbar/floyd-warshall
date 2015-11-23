@@ -10,16 +10,14 @@ import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
-import javafx.scene.shape.StrokeLineCap;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-public class Vertice extends Group {
+public class Aresta extends Group {
 
     private No de;
     private No para;
@@ -32,7 +30,7 @@ public class Vertice extends Group {
 
     IntegerProperty distancia = new SimpleIntegerProperty();
 
-    public Vertice(No de, No para) {
+    public Aresta(No de, No para) {
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Vertice.fxml"));
         fxmlLoader.setRoot(this);
@@ -64,8 +62,8 @@ public class Vertice extends Group {
         if(event.getClickCount() == 2) {
 
             TextInputDialog dialog = new TextInputDialog(distancia.asString().getValue());
-            dialog.setTitle("Distancia do vertice");
-            dialog.setContentText("Digite a distancia do vertice:");
+            dialog.setTitle("Distancia da aresta");
+            dialog.setContentText("Digite a distancia da aresta:");
             Optional<String> result = dialog.showAndWait();
             result.ifPresent(valor -> {
                 distancia.set(Integer.valueOf(valor));
@@ -142,10 +140,10 @@ public class Vertice extends Group {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Vertice vertice = (Vertice) o;
+        Aresta aresta = (Aresta) o;
 
-        if (de != null ? !de.equals(vertice.de) : vertice.de != null) return false;
-        return !(para != null ? !para.equals(vertice.para) : vertice.para != null);
+        if (de != null ? !de.equals(aresta.de) : aresta.de != null) return false;
+        return !(para != null ? !para.equals(aresta.para) : aresta.para != null);
 
     }
 
