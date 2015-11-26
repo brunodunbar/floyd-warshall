@@ -99,6 +99,7 @@ public class Aresta extends Group {
         line.setStartY(dePosition.getY());
         line.setEndX(paraPosition.getX());
         line.setEndY(paraPosition.getY());
+        line.toBack();
 
         label.setLayoutX(dePosition.getX() + ((paraPosition.getX() - dePosition.getX()) / 2));
         label.setLayoutY(dePosition.getY() + ((paraPosition.getY() - dePosition.getY()) / 2));
@@ -136,6 +137,9 @@ public class Aresta extends Group {
 
     public int getDistancia() {
         return distancia.get();
+    }
+    public String getLabel() {
+        return label.getText();
     }
 
     public IntegerProperty distanciaProperty() {

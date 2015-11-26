@@ -225,6 +225,10 @@ public class Grafo extends GridPane {
                 .findAny();
     }
 
+    public No buscaNoPorLabel(String label) {
+        return nos.stream().filter(no->no.getLabel().equals(label)).findFirst().get();
+    }
+
     private class Delta {
         double x, y;
     }
@@ -242,6 +246,8 @@ public class Grafo extends GridPane {
     }
 
     public void clear() {
+        arestas.clear();
+        nos.clear();
         grafoPane.getChildren().clear();
     }
 
