@@ -19,6 +19,7 @@ import javafx.scene.layout.Pane;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Grafo extends GridPane {
 
@@ -106,7 +107,7 @@ public class Grafo extends GridPane {
             }
 
             if (noSelecionado != null && noSelecionado != actionNo) {
-                if (!possuiVertice(noSelecionado, actionNo)) {
+                if (!possuiAresta(noSelecionado, actionNo)) {
                     Aresta aresta = new Aresta(noSelecionado, actionNo);
                     arestas.add(aresta);
                 }
@@ -214,13 +215,13 @@ public class Grafo extends GridPane {
         return wrapGroup;
     }
 
-    private boolean possuiVertice(No no1, No no2) {
-        return buscaVertice(no1, no2).isPresent();
+    private boolean possuiAresta(No no1, No no2) {
+        return buscaAresta(no1, no2).isPresent();
     }
 
-    private Optional<Aresta> buscaVertice(No no1, No no2) {
-        return arestas.stream().filter(vertice -> vertice.getDe().equals(no1) && vertice.getPara().equals(no2) ||
-                vertice.getDe().equals(no2) && vertice.getPara().equals(no1))
+    private Optional<Aresta> buscaAresta(No no1, No no2) {
+        return arestas.stream().filter(aresta -> aresta.getDe().equals(no1) && aresta.getPara().equals(no2) ||
+                aresta.getDe().equals(no2) && aresta.getPara().equals(no1))
                 .findAny();
     }
 
@@ -236,8 +237,16 @@ public class Grafo extends GridPane {
         return arestas;
     }
 
+    public Stream<Aresta> buscaArestas(No no) {
+        return arestas.stream().filter(aresta -> Objects.equals(aresta.getDe(), no) || Objects.equals(aresta.getPara(), no));
+    }
+
     public void clear() {
         grafoPane.getChildren().clear();
+    }
+
+    public No getNoInicial() {
+        return noInicial;
     }
 
     public void setNoInicial(No no) {
@@ -254,5 +263,9 @@ public class Grafo extends GridPane {
         }
         noFinal = no;
         noFinal.setFinal(true);
+    }
+
+    public No getNoFinal() {
+        return noFinal;
     }
 }

@@ -27,6 +27,11 @@
                         <MenuItem mnemonicParsing="false" text="Salvar..." onAction="#handleSalvar"/>
                     </items>
                 </Menu>
+                <Menu mnemonicParsing="false" text="Executar">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="Calcular" onAction="#handleCalcular"/>
+                    </items>
+                </Menu>
             </menus>
         </MenuBar>
         <Grafo fx:id="grafo" GridPane.rowIndex="1"/>

@@ -1,6 +1,8 @@
 package com.estruturadados.floydwarshall;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -29,6 +31,7 @@ public class Aresta extends Group {
     private Label label;
 
     IntegerProperty distancia = new SimpleIntegerProperty();
+    BooleanProperty caminho = new SimpleBooleanProperty();
 
     public Aresta(No de, No para) {
 
@@ -43,6 +46,14 @@ public class Aresta extends Group {
         }
 
         label.textProperty().bind(distancia.asString());
+
+        caminho.addListener(observable -> {
+            if (caminho.getValue()) {
+                line.getStyleClass().add("selecionada");
+            } else {
+                line.getStyleClass().remove("selecionada");
+            }
+        });
 
         this.de = de;
         this.para = para;
@@ -59,7 +70,7 @@ public class Aresta extends Group {
     @FXML
     private void handleMouseClicked(MouseEvent event) {
 
-        if(event.getClickCount() == 2) {
+        if (event.getClickCount() == 2) {
 
             TextInputDialog dialog = new TextInputDialog(distancia.asString().getValue());
             dialog.setTitle("Distancia da aresta");
@@ -133,6 +144,18 @@ public class Aresta extends Group {
 
     public void setDistancia(int distancia) {
         this.distancia.set(distancia);
+    }
+
+    public boolean getCaminho() {
+        return caminho.get();
+    }
+
+    public BooleanProperty caminhoProperty() {
+        return caminho;
+    }
+
+    public void setCaminho(boolean caminho) {
+        this.caminho.set(caminho);
     }
 
     @Override

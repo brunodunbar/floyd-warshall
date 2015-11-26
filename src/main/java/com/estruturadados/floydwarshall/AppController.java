@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.GridPane;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 
 public class AppController {
@@ -12,6 +13,16 @@ public class AppController {
     @FXML
     private Grafo grafo;
 
+    private FloydWarshall floydWarshall;
+
+    @FXML
+    public void initialize() {
+        floydWarshall = new FloydWarshall(grafo);
+    }
+
+    public void handleCalcular(ActionEvent actionEvent) {
+        floydWarshall.calcular();
+    }
 
     public void handleAbrir(ActionEvent actionEvent) {
 

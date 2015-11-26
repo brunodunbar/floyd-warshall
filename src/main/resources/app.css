@@ -32,6 +32,10 @@
     -fx-stroke-line-cap: butt;
 }
 
+.aresta-linha.selecionada {
+    -fx-stroke: red;
+}
+
 .aresta-label {
     -fx-text-fill: white;
 }
