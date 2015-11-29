@@ -1,5 +1,7 @@
 package com.estruturadados.floydwarshall;
 
+import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -57,12 +59,22 @@ public class Grafo extends GridPane {
         nos.addListener((ListChangeListener<No>) c -> {
             while (c.next()) {
                 if (c.wasRemoved()) {
-                    grafoPane.getChildren().removeAll(c.getRemoved());
+                    //Remove as arestas dos nós que estão sendo removidos
+                    c.getRemoved().forEach(o -> {
+                        System.out.print("Removendo nó: " + o);
+                        arestas.removeAll(buscaArestas(o).collect(Collectors.toList()));
+                    });
+
+                    //Remove os nós
+                    List<Node> collect = c.getRemoved().stream()
+                            .map(No::getGroup)
+                            .collect(Collectors.toList());
+
+                    grafoPane.getChildren().removeAll(collect);
                 }
                 if (c.wasAdded()) {
-
                     List<Node> collect = c.getAddedSubList().stream()
-                            .map(no -> makeDraggable(no))
+                            .map(this::makeDraggable)
                             .collect(Collectors.toList());
 
                     grafoPane.getChildren().addAll(collect);
@@ -76,6 +88,7 @@ public class Grafo extends GridPane {
                     grafoPane.getChildren().removeAll(c.getRemoved());
                 }
                 if (c.wasAdded()) {
+                    c.getAddedSubList().forEach(o -> o.setGrafo(this));
                     grafoPane.getChildren().addAll(c.getAddedSubList());
                 }
             }
@@ -96,16 +109,10 @@ public class Grafo extends GridPane {
         });
         contextMenu.getItems().addAll(novoNo);
 
-
         noContextMenu = new ContextMenu();
 
         MenuItem criarAresta = new MenuItem("Criar aresta");
         criarAresta.setOnAction(event -> {
-
-            if (actionNo == null) {
-                return;
-            }
-
             if (noSelecionado != null && noSelecionado != actionNo) {
                 if (!possuiAresta(noSelecionado, actionNo)) {
                     Aresta aresta = new Aresta(noSelecionado, actionNo);
@@ -115,27 +122,15 @@ public class Grafo extends GridPane {
         });
 
         MenuItem definirInicial = new MenuItem("Definir como nó inicial");
-        definirInicial.setOnAction(event -> {
-
-            if (actionNo == null) {
-                return;
-            }
-
-            setNoInicial(actionNo);
-        });
+        definirInicial.setOnAction(event -> setNoInicial(actionNo));
 
         MenuItem definirFinal = new MenuItem("Definir como nó final");
-        definirFinal.setOnAction(event -> {
+        definirFinal.setOnAction(event -> setNoFinal(actionNo));
 
-            if (actionNo == null) {
-                return;
-            }
+        MenuItem removerNo = new MenuItem("Remover nó");
+        removerNo.setOnAction(event -> nos.remove(actionNo));
 
-            setNoFinal(actionNo);
-
-        });
-
-        noContextMenu.getItems().addAll(criarAresta, definirInicial, definirFinal);
+        noContextMenu.getItems().addAll(criarAresta, definirInicial, definirFinal, removerNo);
 
         grafoPane.setOnMouseClicked(event -> {
             if (event.getButton() == MouseButton.SECONDARY) {
@@ -152,6 +147,7 @@ public class Grafo extends GridPane {
     private Node makeDraggable(final No no) {
         final Delta dragDelta = new Delta();
         final Group wrapGroup = new Group(no);
+        no.setGroup(wrapGroup);
 
         wrapGroup.addEventFilter(MouseEvent.ANY, Event::consume);
 
@@ -226,7 +222,7 @@ public class Grafo extends GridPane {
     }
 
     public No buscaNoPorLabel(String label) {
-        return nos.stream().filter(no->no.getLabel().equals(label)).findFirst().get();
+        return nos.stream().filter(no -> no.getLabel().equals(label)).findFirst().get();
     }
 
     private class Delta {

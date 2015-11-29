@@ -7,23 +7,20 @@ public class FloydWarshall {
     private Grafo grafo;
 
     private double[][] distTo;
-    private Aresta[][] edgeTo;
+    private GAresta[][] edgeTo;
     private boolean hasNegativeCycle;
 
     public FloydWarshall(Grafo grafo) {
         this.grafo = grafo;
-
-
     }
 
     public void calcular() {
-
         hasNegativeCycle = false;
         ObservableList<No> nos = grafo.getNos();
 
         int size = nos.size();
         distTo = new double[size][size];
-        edgeTo = new Aresta[size][size];
+        edgeTo = new GAresta[size][size];
 
         for (int v = 0; v < size; v++) {
             for (int w = 0; w < size; w++) {
@@ -42,7 +39,7 @@ public class FloydWarshall {
                         }
 
                         distTo[from][to] = aresta.getDistancia();
-                        edgeTo[from][to] = aresta;
+                        edgeTo[from][to] = new GAresta(from, to, aresta);
 
                         if (distTo[from][from] >= 0.0) {
                             distTo[from][from] = 0.0;
@@ -81,36 +78,27 @@ public class FloydWarshall {
         }
 
         if (hasNegativeCycle) {
-            return;
+            throw new IllegalStateException("O grafo possui ciclos negativos");
         }
 
         No noInicial = grafo.getNoInicial();
         No noFinal = grafo.getNoFinal();
 
         if (noInicial == null || noFinal == null) {
-            return;
+            throw new IllegalStateException("É necessário configurar o inicio e fim");
         }
-
 
         ObservableList<No> nos = grafo.getNos();
         int inicio = nos.indexOf(noInicial);
         int fim = nos.indexOf(noFinal);
 
-
         if (!temCaminho(inicio, fim)) {
-            return;
+            throw new IllegalStateException("Não existe nenhum caminho entre " + noInicial + " e " + noFinal);
         }
 
-        for (Aresta e = edgeTo[inicio][fim]; e != null; ) {
-            e.setCaminho(true);
-
-            int indexOf = nos.indexOf(e.getDe());
-            if (indexOf == inicio) {
-                indexOf = nos.indexOf(e.getPara());
-            }
-
-            e = edgeTo[inicio][indexOf];
-
+        for (GAresta e = edgeTo[inicio][fim]; e != null; ) {
+            e.getAresta().setCaminho(true);
+            e = edgeTo[inicio][e.getDe()];
         }
     }
 
@@ -118,5 +106,27 @@ public class FloydWarshall {
         return distTo[inicio][fim] < Double.POSITIVE_INFINITY;
     }
 
+    private static class GAresta {
+        private int de, para;
+        private Aresta aresta;
+
+        public GAresta(int de, int para, Aresta aresta) {
+            this.de = de;
+            this.para = para;
+            this.aresta = aresta;
+        }
+
+        public int getDe() {
+            return de;
+        }
+
+        public int getPara() {
+            return para;
+        }
+
+        public Aresta getAresta() {
+            return aresta;
+        }
+    }
 
 }

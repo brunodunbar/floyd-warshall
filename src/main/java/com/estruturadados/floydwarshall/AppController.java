@@ -1,10 +1,17 @@
 package com.estruturadados.floydwarshall;
 
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.GridPane;
+import javafx.stage.FileChooser;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 
 public class AppController {
@@ -22,21 +29,19 @@ public class AppController {
     }
 
     public void handleCalcular(ActionEvent actionEvent) {
-        floydWarshall.calcular();
+        try {
+            floydWarshall.calcular();
+        } catch (IllegalStateException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Falha ao calcular caminho");
+            alert.setHeaderText(null);
+            alert.setContentText(e.getMessage());
+
+            alert.showAndWait();
+        }
     }
 
     public void handleAbrir(ActionEvent actionEvent) {
-//
-//        No testNo = new No();
-//        testNo.setLayoutX(30);
-//        testNo.setLayoutY(50);
-//        testNo.setLabel("Test Nó");
-//
-//        grafo.getNos().addAll(testNo);
-//
-//        grafo.setNoFinal(testNo);
-//
-//        System.out.println("Abrir...");
 
         if (abrirFileChooser == null) {
             abrirFileChooser = new FileChooser();
@@ -66,6 +71,8 @@ public class AppController {
 
                                 No no = new No();
 
+                                boolean noFinal = false, noInicial = false;
+
                                 while (reader.hasNext()) {
                                     switch (reader.nextName()) {
                                         case "label":
@@ -77,11 +84,11 @@ public class AppController {
                                         case "y":
                                             no.setLayoutY(reader.nextDouble());
                                             break;
-                                        case "inical":
-                                            no.setInicial(reader.nextBoolean());
+                                        case "inicial":
+                                            noInicial = reader.nextBoolean();
                                             break;
                                         case "final":
-                                            no.setFinal(reader.nextBoolean());
+                                            noFinal = reader.nextBoolean();
                                             break;
                                         default:
                                             reader.skipValue();
@@ -89,6 +96,15 @@ public class AppController {
                                 }
 
                                 grafo.getNos().add(no);
+
+                                if (noInicial) {
+                                    grafo.setNoInicial(no);
+                                }
+
+                                if (noFinal) {
+                                    grafo.setNoFinal(no);
+                                }
+
                                 reader.endObject();
                             }
 
@@ -142,11 +158,9 @@ public class AppController {
                 e.printStackTrace();
             }
         }
-
     }
 
     public void handleSalvar(ActionEvent actionEvent) {
-        System.out.println("Salvar...");
         if (salvarFileChooser == null) {
             salvarFileChooser = new FileChooser();
             salvarFileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Json", "*.json"));
@@ -170,8 +184,14 @@ public class AppController {
                     writer.name("label").value(no.getLabel());
                     writer.name("x").value(no.getLayoutX());
                     writer.name("y").value(no.getLayoutY());
-                    writer.name("inicial").value(no.getInicial());
-                    writer.name("final").value(no.getFinal());
+
+                    if (no.getInicial()) {
+                        writer.name("inicial").value(no.getInicial());
+                    }
+
+                    if (no.getFinal()) {
+                        writer.name("final").value(no.getFinal());
+                    }
 
                     writer.endObject();
 

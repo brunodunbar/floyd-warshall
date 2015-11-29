@@ -4,6 +4,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -17,6 +18,8 @@ public class No extends VBox {
     private final BooleanProperty selecionado = new SimpleBooleanProperty();
     private final BooleanProperty inicial = new SimpleBooleanProperty();
     private final BooleanProperty _final = new SimpleBooleanProperty();
+
+    private Group group;
 
     public No() {
 
@@ -53,8 +56,8 @@ public class No extends VBox {
     public void setLabel(String value) {
         label.setText(value);
     }
-    
-    public String getLabel(){
+
+    public String getLabel() {
         return label.getText();
     }
 
@@ -88,5 +91,18 @@ public class No extends VBox {
 
     public void setFinal(boolean _final) {
         this._final.set(_final);
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
+
+    @Override
+    public String toString() {
+        return label.getText();
     }
 }
